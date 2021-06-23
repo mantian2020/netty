@@ -49,13 +49,20 @@ public final class EchoServer {
         }
 
         // Configure the server.
+        // bossGroup: 处理io事件中的accept
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        // workerGroup: 处理io事件(read/write), 非io任务
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         final EchoServerHandler serverHandler = new EchoServerHandler();
         try {
+            // 定义Server端启动引导类
             ServerBootstrap b = new ServerBootstrap();
+            // 设置主线程池bossGroup, 工作线程池workerGroup
             b.group(bossGroup, workerGroup)
+             // 设置ServerSocketChannel
              .channel(NioServerSocketChannel.class)
+             // linux内核中维护两个队列syns queue(syn到达，三次握手未完成)和accept queue(三次握手完成，连接已建立)
+             // 设置tcp连接中的accept queue(已连接队列)
              .option(ChannelOption.SO_BACKLOG, 100)
              .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(new ChannelInitializer<SocketChannel>() {
