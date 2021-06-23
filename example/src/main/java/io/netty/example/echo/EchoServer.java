@@ -62,7 +62,7 @@ public final class EchoServer {
              // 设置ServerSocketChannel
              .channel(NioServerSocketChannel.class)
              // linux内核中维护两个队列syns queue(syn到达，三次握手未完成)和accept queue(三次握手完成，连接已建立)
-             // 设置tcp连接中的accept queue(已连接队列)
+             // 设置tcp连接中的accept queue(已连接队列) ss
              .option(ChannelOption.SO_BACKLOG, 100)
              .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(new ChannelInitializer<SocketChannel>() {
