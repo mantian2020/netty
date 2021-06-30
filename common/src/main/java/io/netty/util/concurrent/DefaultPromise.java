@@ -93,9 +93,11 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
 
     @Override
     public Promise<V> setSuccess(V result) {
+        // 第一次成功设置返回值后，返回Promise对象
         if (setSuccess0(result)) {
             return this;
         }
+        // 否则抛出异常
         throw new IllegalStateException("complete already: " + this);
     }
 
@@ -602,6 +604,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
     }
 
     private boolean setSuccess0(V result) {
+        // result为null，设置为SUCCESS
         return setValue0(result == null ? SUCCESS : result);
     }
 
@@ -610,9 +613,12 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
     }
 
     private boolean setValue0(Object objResult) {
+        // CAS设置result值，只有当result为null或者UNCANCELLABLE，才可以执行成功
         if (RESULT_UPDATER.compareAndSet(this, null, objResult) ||
             RESULT_UPDATER.compareAndSet(this, UNCANCELLABLE, objResult)) {
+            // 唤醒等待的waiter，同时判断是否存在listener
             if (checkNotifyWaiters()) {
+                // 通知所有的listener
                 notifyListeners();
             }
             return true;
@@ -626,8 +632,10 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
      */
     private synchronized boolean checkNotifyWaiters() {
         if (waiters > 0) {
+            // 通知所有waiters
             notifyAll();
         }
+        // 判断是否添加了监听者listeners
         return listeners != null;
     }
 
