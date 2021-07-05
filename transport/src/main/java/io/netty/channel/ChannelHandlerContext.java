@@ -59,7 +59,7 @@ import io.netty.util.concurrent.EventExecutor;
  *     ...
  * }
  * </pre>
- *
+ *Technological PERFORMANCE
  * <h3>Storing stateful information</h3>
  *
  * {@link #attr(AttributeKey)} allow you to

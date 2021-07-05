@@ -180,7 +180,7 @@ import java.util.NoSuchElementException;
  * <p>
  * A user is supposed to have one or more {@link ChannelHandler}s in a pipeline to receive I/O events (e.g. read) and
  * to request I/O operations (e.g. write and close).  For example, a typical server will have the following handlers
- * in each channel's pipeline, but your mileage may vary depending on the complexity and characteristics of the
+ *  * in each channel's pipeline, but your mileage may vary depending on the complexity and characteristics of the
  * protocol and business logic:
  *
  * <ol>
